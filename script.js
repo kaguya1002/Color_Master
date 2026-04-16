@@ -300,6 +300,9 @@ function showQuestion() {
         typingArea.classList.add('hidden');
         choiceArea.classList.remove('hidden');
         generateChoices(q, isReverse);
+        
+        const idkBtn = document.getElementById('idk-btn');
+        if (idkBtn) idkBtn.classList.remove('disabled');
     }
 }
 
@@ -357,7 +360,7 @@ function checkTypingAnswer() {
     document.getElementById('answer-input').readOnly = true;
 }
 
-function submitChoice(selectedName, btnElement) {
+function submitChoice(selectedName, btnElement = null) {
     if (isAnswered) return;
     const isReverse = currentMode.startsWith('choice_reverse');
     const q = quizList[currentIdx];
@@ -367,10 +370,8 @@ function submitChoice(selectedName, btnElement) {
         
         // 選択肢の正体をすべて開示
         if (isReverse) {
-            // 色パネルの上に色名テキストを表示
             b.innerHTML = `<span style="color: ${getContrastYIQ(b.dataset.hex)}; font-size: 1.1rem; font-weight: bold; text-shadow: 0 0 3px rgba(255,255,255,0.4);">${b.dataset.name}</span>`;
         } else {
-            // ボタンの背景をその色にし、文字色を読みやすく変更
             b.style.backgroundColor = b.dataset.hex;
             b.style.color = getContrastYIQ(b.dataset.hex);
             b.style.borderColor = "transparent";
@@ -382,10 +383,14 @@ function submitChoice(selectedName, btnElement) {
         }
     });
     
-    // 間違えた選択肢を選んでいた場合は赤の太枠をつける
-    if (selectedName !== q.name) {
+    // 間違えた選択肢を選んでいた場合（かつボタン要素が存在する場合）は赤の太枠をつける
+    if (btnElement && selectedName !== q.name) {
         btnElement.style.boxShadow = "0 0 0 5px var(--error) inset";
     }
+
+    // 「分からない」ボタンを無効化
+    const idkBtn = document.getElementById('idk-btn');
+    if (idkBtn) idkBtn.classList.add('disabled');
 
     processAnswer(selectedName);
 }
@@ -478,3 +483,40 @@ document.addEventListener('keydown', e => {
         }
     }
 });
+
+// --- 色一覧機能 ---
+function showColorList() {
+    switchScreen('list-screen');
+    renderColorList('3級'); // デフォルトは3級を表示
+}
+
+function renderColorList(grade) {
+    // タブの切り替え
+    document.getElementById('tab-grade3').classList.toggle('active', grade === '3級');
+    document.getElementById('tab-grade2').classList.toggle('active', grade === '2級');
+
+    const container = document.getElementById('color-list-container');
+    container.innerHTML = '';
+    
+    // リストが切り替わったらスクロール位置をトップに戻す
+    container.scrollTop = 0;
+
+    const targetColors = grade === '3級' ? grade3Colors : grade2Colors;
+
+    targetColors.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'color-list-item';
+        
+        const swatch = document.createElement('div');
+        swatch.className = 'color-list-swatch';
+        swatch.style.backgroundColor = c.hex;
+
+        const name = document.createElement('div');
+        name.className = 'color-list-name';
+        name.innerText = c.name;
+
+        item.appendChild(swatch);
+        item.appendChild(name);
+        container.appendChild(item);
+    });
+}
