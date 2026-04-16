@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color SRS Master</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <aside class="progress-sidebar">
+        <h2>Learning Progress</h2>
+        <div class="progress-tabs">
+            <button class="tab-btn active" onclick="switchProgressTab('typing')">タイピング</button>
+            <button class="tab-btn" onclick="switchProgressTab('choice')">4択</button>
+        </div>
+        <div class="stat-group">
+            <div class="stat-card">
+                <span class="label">未学習</span>
+                <span class="value" id="stat-new">0</span>
+            </div>
+            <div class="stat-card">
+                <span class="label">学習中</span>
+                <span class="value" id="stat-learning">0</span>
+            </div>
+            <div class="stat-card mastered">
+                <span class="label">定着済み</span>
+                <span class="value" id="stat-mastered">0</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <section id="setup-screen" class="screen active">
+            <header class="hero">
+                <h1>Color Master</h1>
+                <p>忘却曲線に基づいた色彩検定学習システム</p>
+            </header>
+
+            <div class="config-panel">
+                <div class="config-item">
+                    <label>出題範囲</label>
+                    <select id="grade-select">
+                        <option value="both">2級 ＆ 3級 全て</option>
+                        <option value="grade2">2級のみ</option>
+                        <option value="grade3">3級のみ</option>
+                    </select>
+                </div>
+                <div class="config-item">
+                    <label>出題モード</label>
+                    <select id="mode-select" onchange="updateProgressDisplay()">
+                        <option value="typing">タイピング入力</option>
+                        <option value="choice_random">4択 (ランダム)</option>
+                        <option value="choice_similar">4択 (似ている色)</option>
+                        <option value="choice_reverse_random">逆引き4択 (ランダム)</option>
+                        <option value="choice_reverse_similar">逆引き4択 (似ている色)</option>
+                    </select>
+                </div>
+                <div class="config-item">
+                    <label>問題数</label>
+                    <select id="count-select">
+                        <option value="10">10問</option>
+                        <option value="20">20問</option>
+                        <option value="50">50問</option>
+                        <option value="all">全ての未習得・復習対象</option>
+                    </select>
+                </div>
+                <button class="start-btn" onclick="initiateQuiz()">学習を開始する</button>
+                <button class="reset-btn" onclick="resetProgress()">進捗をリセット</button>
+            </div>
+        </section>
+
+        <section id="quiz-screen" class="screen hidden">
+            <div class="quiz-header">
+                <button class="abort-btn" onclick="returnToHome()">ホームに戻る</button>
+                <span id="badge" class="badge">---</span>
+                <div class="progress-bar-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+                <span id="counter">1 / 10</span>
+            </div>
+
+            <div id="reverse-question" class="hidden"></div>
+            <div id="color-card" class="color-card"></div>
+            
+            <div class="interaction-area">
+                <div id="typing-area">
+                    <input type="text" id="answer-input" placeholder="色名を入力 (空欄Enterでスキップ)" autocomplete="off">
+                </div>
+                
+                <div id="choice-area" class="hidden">
+                    <div class="choice-grid" id="choice-grid"></div>
+                </div>
+
+                <div id="feedback-area">
+                    <p id="result-msg"></p>
+                    <p id="correct-name"></p>
+                </div>
+                <button id="action-btn" class="action-btn hidden" onclick="handleNext()">次へ進む</button>
+            </div>
+        </section>
+
+        <section id="result-screen" class="screen hidden">
+            <div class="result-content">
+                <h2>Session Complete</h2>
+                <div class="final-stats">
+                    <div class="circle-progress">
+                        <span id="accuracy-val">0</span><small>%</small>
+                    </div>
+                    <p><span id="correct-count">0</span> / <span id="total-count">0</span> 正解</p>
+                </div>
+                <button class="start-btn" onclick="returnToHome()">ホームに戻る</button>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
