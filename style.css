@@ -42,11 +42,33 @@ body {
 }
 
 @media (max-width: 900px) {
-    .progress-sidebar { 
-        display: none; 
-    }
     .app-wrapper {
         flex-direction: column;
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .progress-sidebar { 
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 16px;
+        display: block;
+    }
+
+    .stat-group {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .stat-card {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .stat-card .value {
+        font-size: 1.2rem;
     }
 }
 
@@ -101,14 +123,20 @@ body {
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 32px;
+    align-items: center; /* 中央配置を維持 */
+    padding: 60px 32px 32px; /* 上側のパディングを 32px -> 60px に増加 */
     overflow-y: auto;
 }
 
 .screen { 
     width: 100%; 
     max-width: 580px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .hidden { 
@@ -203,6 +231,38 @@ select:focus {
 
 .start-btn:active, .action-btn:active {
     transform: translateY(0);
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background: transparent;
+    color: var(--error);
+    border: 1px solid var(--error);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.reset-btn:hover {
+    background: #fdf0ed;
+}
+
+.text-link-btn {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--sub-text);
+    text-decoration: underline;
+    font-size: 0.85rem;
+    margin-top: 16px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.text-link-btn:hover {
+    color: var(--accent);
 }
 
 /* クイズUI */
@@ -361,94 +421,7 @@ select:focus {
     color: var(--accent);
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 600px) {
-    .main-content {
-        padding: 20px;
-    }
-    
-    .hero h1 {
-        font-size: 2.2rem;
-    }
-    
-    .config-panel {
-        padding: 24px;
-    }
-    
-    .color-card {
-        height: 220px;
-    }
-}
-
-/* スクロールバーのスタイリング（WebKit系ブラウザ） */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--bg);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--sub-text);
-}
-
-
-@media (max-width: 900px) {
-    .app-wrapper {
-        flex-direction: column;
-        height: auto; /* 高さを自動にしてスクロール可能に */
-        overflow-y: auto;
-    }
-
-    .progress-sidebar { 
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 16px;
-        display: block; /* 表示するように変更 */
-    }
-
-    .stat-group {
-        flex-direction: row; /* 横並びに */
-        gap: 8px;
-    }
-
-    .stat-card {
-        flex: 1;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .stat-card .value {
-        font-size: 1.2rem;
-    }
-}
-
-
-/* 追加スタイリング */
-.reset-btn {
-    width: 100%;
-    padding: 12px;
-    margin-top: 12px;
-    background: transparent;
-    color: var(--error);
-    border: 1px solid var(--error);
-    border-radius: 12px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-.reset-btn:hover {
-    background: #fdf0ed;
-}
-
+/* 共通UIコンポーネント */
 .abort-btn {
     background: var(--border);
     color: var(--text);
@@ -506,7 +479,6 @@ select:focus {
 }
 .choice-btn.disabled, .color-choice-btn.disabled {
     pointer-events: none;
-    /* 色を開示するため、opacityは下げない */
 }
 
 #reverse-question {
@@ -528,4 +500,102 @@ select:focus {
 }
 .color-choice-btn:hover {
     transform: scale(1.05);
+}
+
+.idk-btn {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    color: var(--sub-text);
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+}
+.idk-btn:hover {
+    background: var(--border);
+    color: var(--text);
+    border-color: var(--sub-text);
+}
+.idk-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* --- 色一覧画面 --- */
+#list-screen {
+    max-width: 800px;
+}
+.list-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin-left: 8px;
+    font-size: 1.1rem;
+}
+.color-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 16px;
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-right: 8px;
+    padding-bottom: 20px;
+}
+.color-list-item {
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px var(--shadow);
+    transition: transform 0.2s;
+}
+.color-list-item:hover {
+    transform: translateY(-3px);
+}
+.color-list-swatch {
+    width: 100%;
+    height: 70px;
+}
+.color-list-name {
+    padding: 10px 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--text);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 600px) {
+    .main-content {
+        padding: 20px;
+    }
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    .config-panel {
+        padding: 24px;
+    }
+    .color-card {
+        height: 220px;
+    }
+}
+
+/* スクロールバーのスタイリング */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--sub-text);
 }
