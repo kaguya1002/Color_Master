@@ -81,7 +81,7 @@ const grade2Colors = [
     { name: "黄檗", hex: "#fef263", grade: "2級" },
     { name: "銀鼠", hex: "#91989f", grade: "2級" },
     { name: "朽葉", hex: "#896c39", grade: "2級" },
-    { name: "グラスグリーン", hex: "#7cfc00", grade: "2級" },
+    { name: "グラスグリーン", hex: "#7b8d42", grade: "2級" },
     { name: "ゴールデンイエロー", hex: "#ffd700", grade: "2級" },
     { name: "柑子", hex: "#f6ad49", grade: "2級" },
     { name: "古代紫", hex: "#895b8a", grade: "2級" },
