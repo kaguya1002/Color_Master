@@ -68,12 +68,14 @@
                 </div>
                 <button class="start-btn" onclick="initiateQuiz()">学習を開始する</button>
                 <button class="reset-btn" onclick="resetProgress()">進捗をリセット</button>
+                
+                <button class="text-link-btn" onclick="showColorList()">色一覧（辞書）を見る</button>
             </div>
         </section>
 
         <section id="quiz-screen" class="screen hidden">
             <div class="quiz-header">
-                <button class="abort-btn" onclick="returnToHome()">ホームに戻る</button>
+                <button class="abort-btn" onclick="returnToHome()">← ホームに戻る</button>
                 <span id="badge" class="badge">---</span>
                 <div class="progress-bar-container">
                     <div id="progress-bar" class="progress-bar"></div>
@@ -91,6 +93,7 @@
                 
                 <div id="choice-area" class="hidden">
                     <div class="choice-grid" id="choice-grid"></div>
+                    <button id="idk-btn" class="idk-btn" onclick="submitChoice('')">分からない</button>
                 </div>
 
                 <div id="feedback-area">
@@ -112,6 +115,18 @@
                 </div>
                 <button class="start-btn" onclick="returnToHome()">ホームに戻る</button>
             </div>
+        </section>
+
+        <section id="list-screen" class="screen hidden">
+            <div class="quiz-header">
+                <button class="abort-btn" onclick="returnToHome()">← ホームに戻る</button>
+                <span class="list-title">色彩検定 慣用色名一覧</span>
+            </div>
+            <div class="progress-tabs" style="margin-bottom: 20px;">
+                <button class="tab-btn active" id="tab-grade3" onclick="renderColorList('3級')">3級</button>
+                <button class="tab-btn" id="tab-grade2" onclick="renderColorList('2級')">2級</button>
+            </div>
+            <div id="color-list-container" class="color-list"></div>
         </section>
     </main>
 </div>
