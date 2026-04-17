@@ -520,3 +520,73 @@ function renderColorList(grade) {
         container.appendChild(item);
     });
 }
+
+// --- 進捗別一覧機能 ---
+function showStatusList(statusType) {
+    // 画面を切り替え
+    switchScreen('status-list-screen');
+    
+    const container = document.getElementById('status-list-container');
+    const title = document.getElementById('status-list-title');
+    
+    // 中身とスクロールをリセット
+    container.innerHTML = '';
+    container.scrollTop = 0;
+
+    // 現在のタブ（タイピング or 4択）の進捗データを取得
+    const currentProgData = progress[currentProgressType];
+    let targetColors = [];
+    let titleText = "";
+
+    // ステータスに合わせて色をフィルタリング
+    if (statusType === 'new') {
+        titleText = "未学習の色";
+        targetColors = masterData.filter(c => !currentProgData[c.name]);
+    } else if (statusType === 'learning') {
+        titleText = "学習中の色";
+        targetColors = masterData.filter(c => currentProgData[c.name] && currentProgData[c.name].level < 5);
+    } else if (statusType === 'mastered') {
+        titleText = "定着済みの色";
+        targetColors = masterData.filter(c => currentProgData[c.name] && currentProgData[c.name].level >= 5);
+    }
+
+    // タイトルに件数も表示する
+    title.innerText = `${titleText} (${targetColors.length}色)`;
+
+    // 該当する色がない場合のメッセージ
+    if (targetColors.length === 0) {
+        container.innerHTML = '<p style="text-align:center; width:100%; color:var(--sub-text); margin-top: 20px;">該当する色がありません。</p>';
+        return;
+    }
+
+    // 色カードを生成してコンテナに追加 (辞書機能の使い回し)
+    // === ここから差し替え ===
+    targetColors.forEach(c => {
+        const item = document.createElement('div');
+        item.className = 'color-list-item';
+        
+        const swatch = document.createElement('div');
+        swatch.className = 'color-list-swatch';
+        swatch.style.backgroundColor = c.hex;
+
+        const name = document.createElement('div');
+        name.className = 'color-list-name';
+        name.innerText = c.name;
+
+        // ★修正ポイント：データが存在するか安全に確認してレベルを取得
+        const currentProgData = progress[currentProgressType]; // 確実にデータを取得
+        const level = (currentProgData && currentProgData[c.name]) ? currentProgData[c.name].level : 0;
+
+        // レベルバッジを作成
+        const levelBadge = document.createElement('div');
+        levelBadge.className = 'level-badge';
+        levelBadge.innerText = `Lv.${level}`;
+
+        // 要素を合体させる
+        item.appendChild(swatch);
+        item.appendChild(name);
+        item.appendChild(levelBadge); // ★バッジを追加
+        container.appendChild(item);
+    });
+    // === ここまで ===
+}
