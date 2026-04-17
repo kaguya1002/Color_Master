@@ -16,15 +16,15 @@
             <button class="tab-btn" onclick="switchProgressTab('choice')">4択</button>
         </div>
         <div class="stat-group">
-            <div class="stat-card">
+            <div class="stat-card" onclick="showStatusList('new')">
                 <span class="label">未学習</span>
                 <span class="value" id="stat-new">0</span>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" onclick="showStatusList('learning')">
                 <span class="label">学習中</span>
                 <span class="value" id="stat-learning">0</span>
             </div>
-            <div class="stat-card mastered">
+            <div class="stat-card mastered" onclick="showStatusList('mastered')">
                 <span class="label">定着済み</span>
                 <span class="value" id="stat-mastered">0</span>
             </div>
@@ -128,6 +128,15 @@
             </div>
             <div id="color-list-container" class="color-list"></div>
         </section>
+
+        <section id="status-list-screen" class="screen hidden">
+            <div class="quiz-header">
+                <button class="abort-btn" onclick="returnToHome()">← ホームに戻る</button>
+                <span class="list-title" id="status-list-title">---</span>
+            </div>
+            <div id="status-list-container" class="color-list"></div>
+        </section>
+        
     </main>
 </div>
 
